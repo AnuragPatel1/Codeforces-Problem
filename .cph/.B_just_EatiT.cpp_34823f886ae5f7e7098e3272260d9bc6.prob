@@ -1,0 +1,1 @@
+{"name":"Local: B_just_EatiT","url":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\B_just_EatiT.cpp","tests":[{"id":1735147818230,"input":"3\n4\n1 2 3 4\n3\n7 4 -1\n3\n5 -5 5\n","output":"YES\nNO\nNO\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\B_just_EatiT.cpp","group":"local","local":true}

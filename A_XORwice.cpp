@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long int
+
+
+void solve() {
+  int a,b; cin >> a >> b;
+  cout << (a^b) << endl;
+}
+
+signed main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    
+    int t;
+    std::cin >> t;
+    
+    while (t--) {
+        solve();
+    }
+    
+    return 0;
+}

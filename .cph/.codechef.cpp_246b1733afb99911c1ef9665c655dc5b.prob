@@ -1,0 +1,1 @@
+{"name":"Local: codechef","url":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\codechef.cpp","tests":[{"id":1727878294664,"input":"3\n4 2\n2 6 4 1\n1 3\n3\n2 2\n4 8","output":"2\n0\n1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\codechef.cpp","group":"local","local":true}

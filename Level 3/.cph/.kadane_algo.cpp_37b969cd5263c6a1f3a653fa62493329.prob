@@ -1,0 +1,1 @@
+{"name":"Local: kadane_algo","url":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\Level 3\\kadane_algo.cpp","tests":[{"id":1735065645640,"input":"5\n-1 -2 -3 -4 -5","output":"-1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\91830\\OneDrive\\Desktop\\DSA\\CodeForces\\Level 3\\kadane_algo.cpp","group":"local","local":true}
