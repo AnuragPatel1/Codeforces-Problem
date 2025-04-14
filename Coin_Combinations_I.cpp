@@ -57,23 +57,48 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
-    }
-    // debug(dp);
-    print(dp[0]);
+// RECURSIVE APPROACH
 
+// ll f(vl&arr, ll& n, ll& sum, ll total, vl&dp){
+//      if(sum == total) return 1;
+//      if(dp[total] != -1) return dp[total];
+//      ll include = 0;
+//      rep(j,n){
+//         if((total+arr[j]) <= sum) include += f(arr,n,sum,total+arr[j],dp);
+//     }
+//      return dp[total] = include%M;
+// }
+
+// void solve(){
+//    ll n,sum; cin >> n >> sum;
+//    vl arr(n); cin >> arr;
+//    vl dp(sum+1,-1);
+//    ll total = 0;
+//    ll ans = f(arr,n,sum, total, dp);
+//    print(ans);
+// }
+
+
+//ITERATIVE APPROACH
+
+void solve(){
+    ll n,sum; cin >> n >> sum;
+    vl arr(n); cin >> arr;
+    vl dp(sum+1,0);
+    rrep(i,sum){
+        rep(j,n){
+            if((i+arr[j]) == sum){
+                dp[i]  += 1; 
+            }
+            else if((i+arr[j]) < sum){
+                dp[i] += dp[i+arr[j]] ;
+            }
+        }
+        dp[i] %= M;
+    }
+  print(dp[0]);
 }
+
 
 int main()
 {
@@ -81,8 +106,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

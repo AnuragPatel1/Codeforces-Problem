@@ -57,22 +57,27 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
+ll f(ll n, ll sum, vl&dp){
+    // if(sum > n) return 0;
+    if(sum == n) return 1;
+    if(dp[sum] != -1) return dp[sum]; 
+    
+    ll ans = 0;
+    for(int i = 1; i <= 6; i++){
+        if((sum+i) <= n){
+          ans += f(n,sum+i,dp) % M;
+        }
     }
-    // debug(dp);
-    print(dp[0]);
+    return dp[sum] = ans%M;
+}
 
+void solve(){
+   ll n; cin >> n;
+   ll sum = 0;
+   vl dp(n+1,-1);
+   ll ans = f(n,sum,dp);
+//    debug(dp);
+   print(ans);
 }
 
 int main()
@@ -81,8 +86,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

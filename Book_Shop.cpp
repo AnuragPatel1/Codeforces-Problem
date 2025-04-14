@@ -57,23 +57,52 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
-    }
-    // debug(dp);
-    print(dp[0]);
+// int f(vi& price_array, vi& page_array, int i, int curr_price, int& n, vvi&dp, int price){
+//      if(curr_price > price) return 0;
+//      if(i >= n) return 0;
+//      if(dp[i][curr_price] != -1) return dp[i][curr_price];
+     
+//      int a = 0,b =  0;
+//      if((curr_price+price_array[i]) <= price)
+//          a = page_array[i] + f(price_array,page_array, i+1,curr_price+price_array[i],n,dp,price);
+//      b = f(price_array,page_array,i+1, curr_price,n,dp,price);
+//      return dp[i][curr_price] = max(a,b);
+// }
 
+// void solve(){
+//    int n,price; cin >> n >> price;
+//    vi price_array(n); cin >> price_array;
+//    vi page_array(n); cin >> page_array;
+   
+//    vector<vi>dp(n+1,vi(price+1,-1));
+   
+//    int i = 0;
+//    int curr_price = 0;
+//    int ans = f(price_array,page_array,i,curr_price,n,dp,price);
+// //    debug(dp);
+//    print(ans);
+// }
+
+
+void solve() {
+    int n, x;
+    cin >> n >> x;
+    vector<int> price(n);
+    vector<int> pages(n);
+    for (int i = 0; i < n; ++i) cin >> price[i];
+    for (int i = 0; i < n; ++i) cin >> pages[i];
+
+    vector<int> dp(x + 1, 0);
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = x; j >= price[i]; --j) {
+            dp[j] = max(dp[j], dp[j - price[i]] + pages[i]);
+        }
+    }
+
+    cout << dp[x] << endl;
 }
+
 
 int main()
 {
@@ -81,8 +110,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

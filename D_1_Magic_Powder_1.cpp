@@ -57,22 +57,34 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
-    }
-    // debug(dp);
-    print(dp[0]);
 
+bool safe(vi& req, vi& have, int n, int ans, int extra){
+    rep(i,n){
+        if((req[i]*ans) > have[i]){
+            extra -= (req[i]*ans-have[i]);
+            if(extra < 0) return false;
+        }
+    }
+    return true;
+}
+
+void solve(){
+   int n,k; cin >> n >> k;
+   vi req(n); cin >> req;
+   vi have(n); cin >> have;
+   
+   int s = 0;
+   int e = 10000;
+   int ans = 0;
+   while(s <= e){
+      int mid = (s+e)/2;
+      if(safe(req,have,n,mid,k)){
+         ans = mid;
+         s = mid+1;
+      }
+      else e = mid-1;
+   }
+ print(ans);
 }
 
 int main()
@@ -81,8 +93,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

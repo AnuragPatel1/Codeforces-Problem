@@ -58,20 +58,34 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
-    }
-    // debug(dp);
-    print(dp[0]);
+   string s; cin >> s;
+   int n = s.length();
+   int maxi = '0';
+   for(auto i:s){
+      maxi = (i > maxi) ? i : maxi;
+   }
+   vector<string>ans;
+   int d = maxi -'0';
+   rep(i,d){
+      string temp = "";
+      for(auto &i:s){
+         if(i == '0' && temp == ""){}
+         else{
+            if(i == '0') temp.pb('0');
+            else{
+                i = i-1;
+                temp.pb('1');
+            }
+         }
+      }
+      if(temp != "") ans.pb(temp);
+   }
+
+   cout << ans.size() << "\n"; 
+   for(auto i:ans){
+    cout << i <<" " ;
+   }
+   cout << "\n" ;
 
 }
 
@@ -81,8 +95,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

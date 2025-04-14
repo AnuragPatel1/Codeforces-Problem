@@ -57,21 +57,43 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+
+
 void solve(){
-    int n;cin >> n;
-    vi arr(n); cin >> arr;
-    int i = 0;
-    vi dp(n+1, 0);
-    dp[n] = 0;
-    dp[n-1] = 1;
-    for(int i = n-2; i >= 0 ; i--){
-        if((arr[i]+i+1) <= n)
-           dp[i] += min(1 + dp[i+1] ,dp[arr[i]+i+1]); 
-        else 
-        dp[i] += 1+dp[i+1];
-    }
-    // debug(dp);
-    print(dp[0]);
+   int n; cin >> n;
+   vpi arr(n);
+   rep(i,n){
+      int a; cin >> a;
+      arr[i] = make_pair(a,i);
+   }
+
+   vi seive(1001, -1);
+   rep(i,1001) seive[i] = i;
+
+   for(int i = 2; i*i <= 1001; i++){
+      if(seive[i] == i){
+        for(int j = i; j < 1001; j+= i){
+            if(seive[j] == j) seive[j] = i;
+        }
+      }
+   }
+   
+   map<int,vpi>m;
+   
+   for(auto i:arr){
+      m[seive[i.f]].pb(i);
+   }
+
+   cout << m.size() << endl;
+   vi ans(n,0);
+   int a = 1;
+   for(auto i:m){
+      for(auto j:i.s){
+         ans[j.s] = a;
+      }
+      a++;
+   }
+    cout << ans << endl;
 
 }
 
