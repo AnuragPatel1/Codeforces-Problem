@@ -56,20 +56,20 @@ template<typename T> // cin >> vector<T>
 istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;return istream;}
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
+
 void solve() {
-    int n, m, l, r; cin >> n >> m >> l >> r;
-    int diff = n - m;
-    l = abs(l);
-    if (l >= diff) {
-        l -= diff;
-        diff = 0;
-    }
-    else {
-        diff -= l;
-        l = 0;
-    }
-    cout << -l << " " << r - diff << '\n';
+    int x, y, z;
+    cin >> x >> y >> z;
+
+    auto lps = [](int a, int b) {
+        if ((a % 2 == 0) || (b % 2 == 0)) return a + b;
+        return a + b - 1;
+    };
+
+    int ans = min({lps(y, z), lps(x, z), lps(x, y)});
+    cout << ans << '\n';
 }
+
 
 int main()
 {

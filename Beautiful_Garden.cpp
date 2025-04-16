@@ -56,19 +56,13 @@ template<typename T> // cin >> vector<T>
 istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;return istream;}
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
-void solve() {
-    int n, m, l, r; cin >> n >> m >> l >> r;
-    int diff = n - m;
-    l = abs(l);
-    if (l >= diff) {
-        l -= diff;
-        diff = 0;
-    }
-    else {
-        diff -= l;
-        l = 0;
-    }
-    cout << -l << " " << r - diff << '\n';
+
+void solve(){
+    int n,limit,day; cin >> n >> limit >> day;
+    vi arr(n); cin >> arr;
+    sort(all(arr));
+    int left = n-limit;
+    
 }
 
 int main()
