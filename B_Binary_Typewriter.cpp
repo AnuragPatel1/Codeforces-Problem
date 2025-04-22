@@ -58,24 +58,47 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-    vi arr(3); cin >> arr;
-    sort(all(arr));
-    int ans = 0;
+   int n; cin >> n;
+   string s; cin >> s;
 
-    if(arr[1] != arr[2]){
-      if((arr[1]&1) && (arr[0]&1))  cout << arr[0]+arr[1]-1 << endl ; 
-      else cout << arr[0]+arr[1] << endl;
-      return;
-    }
+   int i = 0;
+   int ans = 0;
+   while(i < n && s[i] == '0'){
+       i++; ans++;
+   }
+   if(i == n){
+       print(ans); return;
+   }
+   ans++;
+   string t = s.substr(i);
 
-    if(!(arr[2]&1) || !(arr[0]&1)){
-          ans = arr[0]+arr[1];
-    }
-    else{
-        ans = arr[0]+arr[1]-1;
-        // if(arr[0] == arr[1])ans--;
-    }
-    print(ans);
+   i  = 0;
+   bool one = true;
+   int c = 0,d=0;
+   while(i < t.length()){
+      while(i < t.length() && one && t[i] == '1'){
+          ans++,i++;
+      }
+      while(i < t.length() && !one && t[i] == '0'){
+          ans++,i++;
+      }
+
+     if(i < t.length()) ans++;
+     if(one)c++;
+     else d++;
+      one = !one;
+      
+   }
+
+   if(c > 1 && d > 0){
+      ans -= 2;
+   }
+   else if(c == 1 && d > 0){
+      ans-=1;
+   }
+
+   cout << ans << endl;
+
 }
 
 int main()
@@ -92,4 +115,3 @@ ios::sync_with_stdio(false);
     }
     return 0;
 }
-

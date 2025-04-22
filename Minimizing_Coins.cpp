@@ -57,25 +57,45 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+
+// USING RECURSIVE APPROACH
+
+// int f(vi&arr, int& sum, int total, vi&dp, int& n){
+//     if(total == sum) return 0;
+//     if(dp[total] != 1e9) return dp[total];
+
+//     int ans = 1e9;
+//     rep(i,n){
+//         if((total + arr[i]) <= sum){
+//            ans = min(ans,1+f(arr,sum,total+arr[i],dp,n));
+//         }
+//     }
+//     return dp[total] = min(ans,dp[total]);
+// }
+
+// USING ITERATIVE APPROACH
+
 void solve(){
-    vi arr(3); cin >> arr;
-    sort(all(arr));
-    int ans = 0;
+    int n,sum; cin >> n >> sum;
+    vi arr(n); cin >> arr;
+    vi dp(sum+1, 1e9);
+    dp[sum] = 0;
 
-    if(arr[1] != arr[2]){
-      if((arr[1]&1) && (arr[0]&1))  cout << arr[0]+arr[1]-1 << endl ; 
-      else cout << arr[0]+arr[1] << endl;
-      return;
+    rrep(i,sum-1){
+        rep(j,n){
+            if((arr[j]+i <= sum)){
+                dp[i] = min(dp[i], 1 + dp[arr[j]+i]);
+            }
+        }
     }
 
-    if(!(arr[2]&1) || !(arr[0]&1)){
-          ans = arr[0]+arr[1];
+//    debug(dp);
+    int ans = dp[0];
+    if(ans == 1e9){
+        cout << -1 << endl;
     }
-    else{
-        ans = arr[0]+arr[1]-1;
-        // if(arr[0] == arr[1])ans--;
-    }
-    print(ans);
+    else cout << ans << endl;
+
 }
 
 int main()
@@ -84,8 +104,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

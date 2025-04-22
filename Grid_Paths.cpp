@@ -57,25 +57,50 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+
+// ll f(vector<string>&arr, int i, int j, vvl& dp, int n){
+//      if(i == (n-1) && j == (n-1)) return 1;
+//      if(dp[i][j] != -1) return dp[i][j];
+     
+//      ll ans = 0;
+//      if((i+1) < n && (arr[i+1][j] != '*')) ans = (ans + f(arr,i+1,j,dp,n))%M;
+
+//      if((j+1) < n && (arr[i][j+1] != '*')) ans = (ans+ f(arr,i,j+1,dp,n))%M;
+
+//      return dp[i][j] = ans%M;
+
+// }
+
 void solve(){
-    vi arr(3); cin >> arr;
-    sort(all(arr));
-    int ans = 0;
-
-    if(arr[1] != arr[2]){
-      if((arr[1]&1) && (arr[0]&1))  cout << arr[0]+arr[1]-1 << endl ; 
-      else cout << arr[0]+arr[1] << endl;
-      return;
+    int n; cin >> n;
+    vector<string>arr(n);
+    cin >> arr;
+    
+    if(arr[0][0] == '*' || arr[n-1][n-1] == '*'){
+        cout << 0 << endl; return;
     }
 
-    if(!(arr[2]&1) || !(arr[0]&1)){
-          ans = arr[0]+arr[1];
+    vector<vl>dp(n,vl(n,0));
+    
+    
+    rrep(i,n-1){
+        rrep(j,n-1){
+            ll count = 0;
+            if(arr[i][j] != '*'){
+                if(((j+1) < n) && arr[i][j+1] != '*') count +=  dp[i][j+1];
+                if( ((i+1) < n) && arr[i+1][j] != '*') count +=  dp[i+1][j];
+            }
+            dp[i][j] = count%M;
+            dp[n-1][n-1] = 1;
+        }
     }
-    else{
-        ans = arr[0]+arr[1]-1;
-        // if(arr[0] == arr[1])ans--;
-    }
-    print(ans);
+
+    // debug(dp);
+
+    cout << dp[0][0] << endl;
+    
+
+    
 }
 
 int main()
@@ -84,8 +109,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

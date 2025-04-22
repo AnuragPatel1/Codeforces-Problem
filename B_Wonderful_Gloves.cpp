@@ -58,23 +58,26 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-    vi arr(3); cin >> arr;
-    sort(all(arr));
-    int ans = 0;
-
-    if(arr[1] != arr[2]){
-      if((arr[1]&1) && (arr[0]&1))  cout << arr[0]+arr[1]-1 << endl ; 
-      else cout << arr[0]+arr[1] << endl;
-      return;
+    int n,k ; cin >> n >> k;
+    vl arr1(n); cin >> arr1;
+    vl arr2(n); cin >> arr2;
+    vl arr;
+    ll ans = 0;
+    rep(i,n){
+        if(arr1[i] > arr2[i]){
+            ans+= arr1[i];
+            arr.pb(arr2[i]);
+        }
+        else{
+            ans += arr2[i];
+            arr.pb(arr1[i]);
+        }
     }
-
-    if(!(arr[2]&1) || !(arr[0]&1)){
-          ans = arr[0]+arr[1];
+    sort(arr.rbegin(), arr.rend());
+    rep(i,k-1){
+        ans += arr[i];
     }
-    else{
-        ans = arr[0]+arr[1]-1;
-        // if(arr[0] == arr[1])ans--;
-    }
+    ans++;
     print(ans);
 }
 

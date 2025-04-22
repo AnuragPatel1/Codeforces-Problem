@@ -57,25 +57,43 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+int f(string& s,int& n,string& t,int& m,int i,int j,vvi&dp){
+    // base rule
+    if(i == n) return m-j;
+    if(j == m) return n-i;
+    if(dp[i][j] != -1) return dp[i][j];
+
+    int a=1e6,b=1e6,c=1e6,d = 1e6;
+
+    if(s[i] == t[j]){
+        d = 0 + f(s,n,t,m,i+1,j+1,dp);
+    }
+    a =1+ f(s,n,t,m,i+1,j,dp);
+    b =1+ f(s,n,t,m,i,j+1,dp);
+    c =1+ f(s,n,t,m,i+1,j+1,dp);
+    
+
+   int ans = min(min(a,b),min(c,d));
+   return dp[i][j] = ans;
+
+}
+
 void solve(){
-    vi arr(3); cin >> arr;
-    sort(all(arr));
-    int ans = 0;
-
-    if(arr[1] != arr[2]){
-      if((arr[1]&1) && (arr[0]&1))  cout << arr[0]+arr[1]-1 << endl ; 
-      else cout << arr[0]+arr[1] << endl;
-      return;
-    }
-
-    if(!(arr[2]&1) || !(arr[0]&1)){
-          ans = arr[0]+arr[1];
-    }
-    else{
-        ans = arr[0]+arr[1]-1;
-        // if(arr[0] == arr[1])ans--;
-    }
+    string s,t; cin >> s >> t;
+    int n = s.length();
+    int m = t.length();
+    int i = 0,j=0;
+    vector<vi>dp(n+1,vi(m+1,-1));
+    int ans = f(s,n,t,m,i,j,dp);
     print(ans);
+
+}
+
+void solve(){
+    string s,t; cin >> s >> t;
+    int n = s.length();
+    int m = t.length();
+    
 }
 
 int main()
@@ -84,8 +102,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();
