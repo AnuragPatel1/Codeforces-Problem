@@ -57,34 +57,39 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    int n; cin >> n;
-    vi arr(n+1,0); 
-    for(int i= 1; i <= n;i++){
-        int a; cin >> a;
-        arr[i] = a;
-    }
+
+int f(int&n, vi& arr, int i, vi&dp){
+    if(i >= n) return 0;
     
-    vi ans(n+1, -1);
-    
-    for(int i = n; i > 0; i--){
-        int maxi = 0;
-        for(int j = i; j <= n; j+=i){
-          if(arr[i] < arr[j])  maxi = max(maxi, ans[j]);
+    int ans = 0;
+    for(int j = i; j < n; j+=i){
+        if(arr[j] > arr[i]){
+            ans = 1 + f
+            
         }
-        ans[i] = maxi+1;
     }
 
+}
 
-    int maxi = 0;
-    for(auto i:ans){
-        maxi = max(i,maxi);
-    }
-    print(maxi);
+
+void solve(){
+   int n; cin >> n;
+   vi arr(n); cin >> arr;
+
+   int i = 0;
+
+   vi dp(n+1, -1);
+   int ans = f(n,arr,i,dp);
+   print(ans);
+
+
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

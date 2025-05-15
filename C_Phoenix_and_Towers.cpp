@@ -57,36 +57,39 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
-
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
-        }
-    }
-    
-    return dp[size][last] = ans%M;
-
-}
-
 void solve(){
-   int n,k; cin >> n >> k;
-   
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
+    ll n,size,d; cin >> n >> size>> d;
+    vl arr(n); cin >> arr;
+
+    multiset<pair<ll,ll>>m;
+    rep(i,size){
+        m.insert(make_pair(0,i+1));
+    }
+
+    rep(i,n){
+        auto x = m.begin();
+        pair<ll,ll>key = *x;
+        m.erase(m.find(key));
+        key.f += arr[i];
+        arr[i] = key.s;
+        m.insert(key);
+    }
+
+    auto x = m.end();
+    x--;
+    pair<ll,ll>p = *x;
+    pair<ll,ll>p2 = *m.begin();
+
+    // debug(p.f); debug(p2.f);
+
+    if((p.f - p2.f) > d){
+        NO; return;
+    }
+
+    YES;
+    print(arr);
 
 }
-
 
 int main()
 {
@@ -94,8 +97,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    t = 1;
-    // cin>>t;
+    // t = 1;
+    cin>>t;
     while(t--)
     {
         solve();

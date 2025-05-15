@@ -57,36 +57,62 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
+void solve(){
+    int n,m; cin >> n >> m;
+    vi arr(n); cin >> arr;
+    vi limit(m); cin >> limit;
 
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
-        }
+
+    vi pre(n,0), suff(n,0);
+
+    int i = 0,j = 0;
+    while(i < n && j < m){
+          if(arr[i] >= limit[j]) {pre[i]++; j++;}
+          if(i != 0) pre[i] += pre[i-1];
+          i++;
     }
     
-    return dp[size][last] = ans%M;
+    while(i < n) {pre[i] = m; i++;}
 
-}
+    debug(pre);
+    i = n-1, j = m-1;
 
-void solve(){
-   int n,k; cin >> n >> k;
+    while(i >= 0 && j >= 0){
+        if(arr[i] >= limit[j]){suff[i]++; j--;}
+        if(i != (n-1)) suff[i] += suff[i+1];
+        i--;
+    }
+    while(i >= 0) suff[i--] = m;
+
+    debug(suff);
+
+
+    if(suff[0] == m || pre[n-1] == m){
+        print(0); return;
+    }
+
+    int ans = INT_MAX;
+    // print(ans);
    
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
+    vi rev = limit;
+    reverse(all(rev));
+
+    rep(i,n){
+        if((pre[i]+suff[i] + 1 ) == m){
+            ans = min(ans,limit[pre[i]]);
+            ans = min(ans,rev[suff[i]]);
+            // cerr << ans << endl;
+        }
+    }
+
+    if(ans == INT_MAX){
+        print(-1); return;
+    }
+
+print(ans);
+   
 
 }
-
 
 int main()
 {
@@ -94,8 +120,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    t = 1;
-    // cin>>t;
+    // t = 1;
+    cin>>t;
     while(t--)
     {
         solve();

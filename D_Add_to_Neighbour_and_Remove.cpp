@@ -57,36 +57,41 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
+bool safe(vi &arr, int del, int &n){
+    int rem = n - del;
+    int sum = accumulate(all(arr), 0);
 
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
-        }
-    }
+    int key = sum/rem;
+    if(sum % rem != 0) return false;
     
-    return dp[size][last] = ans%M;
+    int val = 0;
+    rep(i,n){
+        val += arr[i];
+        if(val == key){
+            rem--;
+            val = 0;
+        }
+        else if(val > key) return false;
+    }
+
+    if(rem == 0) return true;
+    else return false;
 
 }
 
 void solve(){
-   int n,k; cin >> n >> k;
-   
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
+    int n; cin >> n;
+    vi arr(n); cin >> arr;
+    int ans = n-1;
+    rep(i,n){
+        if(safe(arr,i,n)){
+            print(i);
+            return;
+        }
+    }
+    print(ans);
 
 }
-
 
 int main()
 {
@@ -94,8 +99,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    t = 1;
-    // cin>>t;
+    // t = 1;
+    cin>>t;
     while(t--)
     {
         solve();

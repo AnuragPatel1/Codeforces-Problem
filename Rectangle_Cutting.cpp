@@ -57,36 +57,49 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
 
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
-        }
-    }
-    
-    return dp[size][last] = ans%M;
+// USING TOP DOWN APPROACH
+// int f(int n, int m, vector<vector<int>>& dp) {
+//     if (n == m) return 0;
+//     if (dp[n][m] != -1) return dp[n][m];
 
-}
+//     int ans = INT_MAX;
+
+//     for (int i = 1; i < n; ++i)
+//         ans = min(ans, 1 + f(i, m, dp) + f(n - i, m, dp));
+
+//     for (int i = 1; i < m; ++i)
+//         ans = min(ans, 1 + f(n, i, dp) + f(n, m - i, dp));
+
+//     return dp[n][m] = ans;
+// }
+
+// USING BOTTOM UP APPROACH
 
 void solve(){
-   int n,k; cin >> n >> k;
-   
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
+    int n,m; cin >> n >> m;
+    
+    vector<vi>dp(501, vi(501, 1e9));
+
+    for(int i = 0; i <= n; i++){
+        for(int j = 0; j <= m; j++){
+
+            if(i == j){
+                dp[i][j] = 0;
+            }
+
+            for(int k = 1; k < i; k++){
+                dp[i][j] = min(dp[i][j], 1 + dp[k][j] + dp[i-k][j]);
+            }
+            for(int k = 1; k < j; k++){
+                dp[i][j] = min(dp[i][j], 1 + dp[i][k]+dp[i][j-k]);
+            }
+        }
+    }
+
+    print(dp[n][m]);
 
 }
-
 
 int main()
 {

@@ -57,36 +57,94 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
+void solve(){
+    int n; cin >> n;
+    mii entry;
+    map<int, multiset<int>> size;
 
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
+    rep(i,n){
+        int a; cin >> a;
+        if(entry.find(a) != entry.end()){
+            // present
+            int prev = entry[a];
+            if(prev == 4){
+                entry[a] = 1;
+                // size[prev](size[prev].find(a));
+                size[1].insert(a);
+            }
+           else {
+              entry[a]++;
+              size[prev].erase(size[prev].find(a));
+              size[prev+1].insert(a);
+           }
+            
+            
+        }
+        else{
+            entry[a] = 1;
+            size[1].insert(a);
         }
     }
-    
-    return dp[size][last] = ans%M;
 
-}
+        // debug(entry);
+        // debug(size);
+        // cerr << endl;
 
-void solve(){
-   int n,k; cin >> n >> k;
+
+     int q; cin >> q;
+
+     while(q--){
+        char c; cin >> c;
+        int a; cin >> a;
+        if(c == '+'){
+
+            if(entry.find(a) != entry.end()){
+                 // present
+                int prev = entry[a];
+                if(prev == 4){
+                    entry[a] = 1;
+                    // size[prev](size[prev].find(a));
+                    size[1].insert(a);
+                }
+                else {
+                    entry[a]++;
+                    size[prev].erase(size[prev].find(a));
+                    size[prev+1].insert(a);
+                }    
+                
+             }
+            else{
+                entry[a] = 1;
+                size[1].insert(a);
+            }
+
+        }
+        else{
+                int prev = entry[a];
+                if(prev == 1){
+                     entry[a] = 4;
+                     size[prev].erase(size[1].find(a));
+                }
+                else{
+                    entry[a]--;
+                    size[prev].erase(size[prev].find(a));
+                    size[prev-1].insert(a);
+                }
+        }
+
+        // debug(entry);
+        // debug(size);
+        // cerr << endl;
+
+        if(size[4].size() == 0) NO;
+        else if(size[4].size() >= 2) YES;
+        else if(size[4].size() == 1 && (size[2].size() >= 2 || (size[3].size() >= 2 || (size[2].size() == 1 && size[3].size() == 1)))) YES;
+        else NO;
+
+     }
    
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
 
 }
-
 
 int main()
 {

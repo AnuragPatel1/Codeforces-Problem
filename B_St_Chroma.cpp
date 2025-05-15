@@ -57,36 +57,26 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-ll f(int& n, int& k, vvl&dp, int size,int last){
-    if(size == k) {return 1; }
-    if(dp[size][last] != -1) return dp[size][last];
-
-    ll ans = 0;
-    for(int i = last; i <= n; i+=last){
-        if((i%last) == 0){                               
-           ans = (ans + f(n,k,dp,size+1,i))%M;          
-        }
-    }
-    
-    return dp[size][last] = ans%M;
-
-}
-
 void solve(){
-   int n,k; cin >> n >> k;
-   
-   vector<vl> dp(k+1, vl(n+1,-1));
-   int size = 0;
-   int last = 0;
-   ll ans = 0;
-   rep(i,n){
-      ans =( ans + f(n,k,dp,1,i+1))%M;
-   }
-//    debug(28312087949%M);
-   print(ans);
+    int n,k; cin >> n >> k;
+
+    if(k >= n){
+        rep(i,n) cout <<i <<" ";
+        cout << endl; return;
+    }
+
+    vi ans(n,-1);
+    ans[n-1] = k;
+
+    int val = 0;
+    rep(i,n-1){
+        if(val == k) val++;
+        ans[i] = val;
+        val++;
+    }
+    print(ans);
 
 }
-
 
 int main()
 {
@@ -94,8 +84,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    t = 1;
-    // cin>>t;
+    // t = 1;
+    cin>>t;
     while(t--)
     {
         solve();
