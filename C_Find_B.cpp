@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -57,23 +58,8 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
-
-}
-
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+ 
 }
 
 int main()

@@ -57,23 +57,39 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
+int f(string &s, string &t, int&n, int&m, int i, int j, vvi&dp){
+    // base case 
+    if(i >= n || j >= m) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+    // when s[i] == t[j] => we have to include it into the answer
+    if(s[i] == t[j]) return dp[i][j] = 1 + f(s,t,n,m,i+1,j+1,dp);
+    
+    // otherwise when both are not equal then we took the maximum from it
+    return dp[i][j] = max(f(s,t,n,m,i+1, j,dp), f(s,t,n,m,i,j+1, dp));
 
 }
 
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    string s,t; cin >> s >> t;
+    int n=s.length(), m = t.length();
+
+    vector<vi>dp(n, vi(m, -1));
+    int i = 0 , j = 0;
+    int length = f(s,t,n,m,i,j,dp);
+    
+     int x = 0,y= 0 ;
+    while(x < n && y < m){
+        if(s[x] == t[y]){
+            cout << s[x] ;
+            x++, y++;
+        }
+        else{
+            if((x+1) < n && dp[x][y] == dp[x+1][y]) x++;
+            else if((y+1) < m && dp[x][y] == dp[x][y+1]) y++;
+            else break;
+        }
+    }
+
 }
 
 int main()
@@ -82,8 +98,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

@@ -57,23 +57,65 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
-
-}
-
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    ll n; cin >> n;
+    vpl points(n);                         // input
+    vl x(n); vl y(n);
+    rep(i,n){
+       ll a,b; cin >> a >> b;
+       points[i] = {a,b};
+       x[i] = a; y[i] = b;
+    }
+    
+    if(n < 3){
+        print(n); return;
+    }
+
+    sort(all(x));
+    sort(all(y));
+
+    ll minx = x[0], miny = y[0], maxx = x[n-1], maxy = y[n-1];  
+    
+    ll xmincount = 0, ymincount=0, xmaxcount = 0, ymaxcount = 0;
+
+    for(ll i = 0; i < n; i++){
+        if(points[i].f == minx) xmincount++;
+        if(points[i].f == maxx) xmaxcount++;
+        if(points[i].s == miny) ymincount++;
+        if(points[i].s == maxy) ymaxcount++;
+    }
+
+    ll ans = (maxx - minx + 1) * (maxy - miny+1);
+
+    rep(i,n){
+        ll a = points[i].f;
+        ll b = points[i].s;
+
+        ll newxmin = minx , newxmax = maxx;
+        ll newymin = miny , newymax = maxy;
+
+        if(a == minx && xmincount == 1) newxmin = x[1];
+        if(a == maxx && xmaxcount == 1) newxmax = x[n-2];
+        if(b == maxy && ymaxcount == 1) newymax = y[n-2];
+        if(b == miny && ymincount == 1) newymin = y[1];
+
+        ll hei = newxmax - newxmin + 1;
+        ll wid = newymax - newymin + 1;
+
+        ll ar = hei*wid;
+        if(ar == n-1){
+            ar += min(wid, hei);
+        }
+        if(ar < ans){
+            ans = ar;
+        }
+
+        
+    }
+    
+    print(ans);
+    
+
 }
 
 int main()

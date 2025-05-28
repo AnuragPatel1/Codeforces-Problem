@@ -11,8 +11,8 @@ using namespace std;
 #define rrep(i,j) for(int i = j; i>=0; i--)
 #define all(x) x.begin(), x.end()
 #define print(x) cout << x << endl
-#define YES cout<<"Yes"<<endl
-#define NO cout<<"No"<<endl
+#define YES cout<<"YES"<<endl
+#define NO cout<<"NO"<<endl
 #define pm cout<<"-1"<<endl
 
 //Typedef
@@ -58,30 +58,14 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-   ll n,price,a,b; cin >> n >> price >> a >> b;
-   ll mini = min(a,b);
-   ll maxi = max(a,b);
-
-   if(mini*n > price || maxi*n < price) {NO; return;}
-
-   ll val = 0;
-
-   while(n > 0){
-       if((maxi*n + val) == price){
-          YES; return;
-       }
-       else if((maxi*n + val) > price){
-          val += mini;
-          n--;
-       }
-       else{
-        NO; return;
-       }
-   }
-   if(val == price) YES;
-   else NO; 
-
-
+   ll move, pos, a,b; cin >> move >> pos >> a >> b;
+       if ((pos - move * b) % (a - b) == 0) {
+        ll x = (pos - move * b) / (a - b);
+        if (x >= 0 && x <= move) print("Yes");
+        else print("No");
+    }
+    else print("No");
+   
 }
 
 int main()

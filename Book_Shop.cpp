@@ -57,52 +57,34 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-// int f(vi& price_array, vi& page_array, int i, int curr_price, int& n, vvi&dp, int price){
-//      if(curr_price > price) return 0;
-//      if(i >= n) return 0;
-//      if(dp[i][curr_price] != -1) return dp[i][curr_price];
-     
-//      int a = 0,b =  0;
-//      if((curr_price+price_array[i]) <= price)
-//          a = page_array[i] + f(price_array,page_array, i+1,curr_price+price_array[i],n,dp,price);
-//      b = f(price_array,page_array,i+1, curr_price,n,dp,price);
-//      return dp[i][curr_price] = max(a,b);
-// }
+void solve(){
+    int n,x; cin >> n >> x;
+    vi cost(n); cin >> cost;
+    vi pages(n); cin >> pages;
 
-// void solve(){
-//    int n,price; cin >> n >> price;
-//    vi price_array(n); cin >> price_array;
-//    vi page_array(n); cin >> page_array;
-   
-//    vector<vi>dp(n+1,vi(price+1,-1));
-   
-//    int i = 0;
-//    int curr_price = 0;
-//    int ans = f(price_array,page_array,i,curr_price,n,dp,price);
-// //    debug(dp);
-//    print(ans);
-// }
+    vector<vi>dp(n+1,vi(x+1,0));
+    // dp[i][j] = maximum pages we can read from ith to the (n-1)th book such that
+    // we can only spend at max k money
 
-
-void solve() {
-    int n, x;
-    cin >> n >> x;
-    vector<int> price(n);
-    vector<int> pages(n);
-    for (int i = 0; i < n; ++i) cin >> price[i];
-    for (int i = 0; i < n; ++i) cin >> pages[i];
-
-    vector<int> dp(x + 1, 0);
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = x; j >= price[i]; --j) {
-            dp[j] = max(dp[j], dp[j - price[i]] + pages[i]);
-        }
+    // base case
+    for(int i =0; i <= x;i++){
+        dp[n][i] = 0;
     }
 
-    cout << dp[x] << endl;
+    // transition
+    // dp[i][k] = max(dp[i+1][k-cost[i]]+ pages[i] , dp[i+1][k])
+    for(int i = n-1; i >= 0; i--){
+        for(int k = 0; k <= x; k++){
+            ll pick = 0; // not allowed to pick always
+            ll skip = dp[i+1][k]; // always allowed to skip
+            if(cost[i] <= k){
+                pick = pages[i]+dp[i+1][k-cost[i]];
+            }
+            dp[i][k] = max(pick, skip);
+        }
+    }
+     cout << dp[0][x];
 }
-
 
 int main()
 {
@@ -118,4 +100,6 @@ ios::sync_with_stdio(false);
     }
     return 0;
 }
+
+
 

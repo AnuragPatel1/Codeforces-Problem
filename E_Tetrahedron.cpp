@@ -57,23 +57,93 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
+// int f(ll&n , vvl&dp, ll last_char, ll i){
+//     if(i >= n){
+//         if(last_char == 3) return 1;
+//        return 0;
+//     }
+//     if(dp[i][last_char] != -1) return dp[i][last_char];
+//     ll arr[4];
+//     arr[0]=0;
+//     arr[1]=1;
+//     arr[2]=2;
+//     arr[3]=3;
+//     ll ans = 0;
+//     for(ll j = 0; j < 4; j++){
+//          if(arr[j] != last_char){
+//             ans = (ans +  f(n,dp,arr[j],i+1))%M;
+//         }
+//     }
+//     return dp[i][last_char]  = ans%M;
+// }
 
-}
+// void solve(){
+//     ll n; cin >> n;      
+//     vector<vector<ll>>dp(n, vector<ll>(4,-1));
+//     ll last_char = 3;
+//     ll i = 0;
+//     ll ans = f(n,dp,last_char,i);
+//     // debug(dp);
+//     print(ans);
+// }
+
+
+// void solve(){
+//     ll n; cin >> n;
+//     vector<vl>dp(n+1, vl(4,0));
+    
+//     for(int j = 0; j < 3;j++){
+//         dp[1][j] = 1;
+//     }
+
+//     // fill the dp table
+//     for(int i = 2; i <= n; i++){
+//         for(int curr = 0; curr < 4; curr++){
+//             for(int prev = 0; prev < 4; prev++){
+//                 if(curr != prev){
+//                     dp[i][curr] = (dp[i][curr] + dp[i-1][prev]) %M ;
+//                 }
+//             }
+//         }
+//     }
+
+//     // final subproblem : dp[n][3];
+//     print(dp[n][3]);
+
+// }
+
+
+// void solve(){
+//     int n; cin >> n;
+//     // vi cur(4,1);
+//     vi pre(4,1);
+//     // prev[3] = 1; // zeroth row
+//     pre[3] = 0; // i = 1th row
+//     // pre = cur;
+//     for(int i = 2; i <= n; i++){
+//         vi cur(4,0);
+//         for(int curr = 0; curr < 4; curr++){
+//             for(int prev = 0; prev < 4; prev++){
+//                 if(curr != prev) cur[curr] = (cur[curr]+pre[prev])%M;
+//             }
+//         }
+//         pre = cur;
+//     }
+    
+//     cout << pre[3] << endl;
+// }
 
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    int n; cin >> n;
+    int zD = 1;
+    int zABC = 0;
+    for (int i = 1; i <= n; i++) {
+        int nzD = zABC * 3LL % M;
+        int nzABC = (zABC * 2LL + zD) % M;
+        zD = nzD;
+        zABC = nzABC;
+    }
+    cout << zD;
 }
 
 int main()
@@ -82,8 +152,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

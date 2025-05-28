@@ -57,23 +57,43 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
-
-}
-
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    ll n,total; cin >> n >> total;
+    vl cost, value;
+    cost.pb(0); value.pb(0);
+    rep(i,n){
+        ll a,b; cin >> a >> b;
+        cost.pb(a);
+        value.pb(b);
+    }
+
+    vector<vl>dp(n+1,vl(100000)); // we set total+1, total+1 is not a possible answer because we have total money available is total so we can not select this when the money is greater then total for valid answer the value must be less than total 
+    // dp[i][j] -> minimum money I have to spend till ith index to get jth value
+    
+    rep(i,n+1){
+        rep(j,100001){
+            dp[i][j] = total+1;
+        }
+    }
+
+    dp[0][0] = 0;
+
+    for(ll i = 1; i <= n; i++){
+        dp[i][0] = 0;
+        for(ll j = 1; j <= 100000; j++){
+           dp[i][j] = dp[i-1][j]; // not pick
+           if(j >= value[i] && (dp[i-1][j-value[i]] + cost[i]) <= total )
+              dp[i][j] = min(dp[i-1][j] , cost[i] + dp[i-1][j-value[i]]);
+        }
+    }
+
+    ll answer = 0;
+    for(ll i  = 1; i <= 100000; i++){
+        if(dp[n][i] <= total) answer = i;
+    }
+
+    print(answer);
+
 }
 
 int main()
@@ -82,8 +102,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

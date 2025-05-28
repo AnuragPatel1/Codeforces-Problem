@@ -57,23 +57,59 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
-
-}
-
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    int n,size,k; cin >> n >> size >> k;
+    vi arr(n); cin >> arr;
+    map<int,int>ideal; 
+    rep(i,size){
+        int a; cin >> a;
+        ideal[a]++;
+    }
+    int ans = 0;
+    int i = 0;
+    int val = 0;
+    map<int,int>chk;
+
+    while(i < size){
+        chk[arr[i]]++;
+            if(ideal.find(arr[i]) != ideal.end()){
+                val -= min(ideal[arr[i]], chk[arr[i]]-1);
+                val += min(ideal[arr[i]], chk[arr[i]]);
+            }
+        i++;
+    }
+    
+    if(val >= k) ans++;
+    
+    // debug(ideal); debug(ans); debug(chk); debug(val); cerr << endl;
+
+    int j = 0;
+    while(i < n){
+         chk[arr[j]]--;
+         if(chk[arr[j]] == 0) chk.erase(arr[j]);
+         if(ideal.find(arr[j]) != ideal.end()){
+                val -= min(ideal[arr[j]], chk[arr[j]]+1);
+                // debug("h1");
+                // debug(chk);
+                val += min(ideal[arr[j]], chk[arr[j]]);
+            }
+            // debug(val);
+         chk[arr[i]]++;
+         if(ideal.find(arr[i]) != ideal.end()){
+                val -= max(0, min(ideal[arr[i]], chk[arr[i]]-1));
+                // debug(val);
+                val += min(ideal[arr[i]], chk[arr[i]]);
+            } 
+            // cerr << "Value is : " << val << endl;
+            if(val >= k) ans++;
+          i++,j++;
+          
+        //    debug(ideal); debug(ans); debug(chk); debug(val); cerr << endl;
+          
+    }
+
+    print(ans);
+
 }
 
 int main()

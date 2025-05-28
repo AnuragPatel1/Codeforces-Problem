@@ -57,23 +57,22 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
-
-}
-
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    int n; cin >> n;
+    vi arr(n); cin >> arr;
+
+    // int ans = 0;
+    vi ans;
+    int i = 0;
+    while(i < n){
+        if(!i) ans.pb(arr[i]);
+        else{
+            if((arr[i] - ans.back()) > 1) ans.pb(arr[i]);
+        }
+        i++;
+    }
+    
+    print(ans.size());
 }
 
 int main()

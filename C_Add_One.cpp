@@ -57,23 +57,32 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-int f(int &n, string &s, vi&dp, int i){
-    // base case
-    if(i >= n) return 0;
-    int ans= 0 ;
-    if((i+1) < n && s[i]==s[i+1]){
-         ans += 1+ f(n,s,dp,i+1);
-    } 
-    else 
+// we need to calculate dp[n][i] => if digit is n and the operation is i then the total number of digits
 
+int dp[10][200001];
+void preprocess(){
+    for(int i = 0; i < 10; i++){
+          dp[i][0] = 1;   // without any operation there is one size for every number
+    }
+    for(int i = 1; i <= 200001; i++){
+        for(int j = 0; j < 9;j++){
+            dp[j][i] = dp[j+1][i-1];
+        }
+        dp[9][i] = (dp[0][i - 1] + dp[1][i - 1]) % M;
+    }
 }
 
 void solve(){
-   int n; cin >> n; string s; cin >> s;
-   vi dp(n+1,-1);
-   int i = 0;
-   int ans = f(n,s,dp,i);
-   print(ans);
+    int n; cin >> n;
+    int k; cin >> k;
+
+    ll ans = 0;
+    while(n > 0){
+        int digit = n % 10;
+        ans = (ans + dp[digit][k]) % M;
+        n /= 10;
+    }
+    print(ans);
 }
 
 int main()
@@ -83,6 +92,7 @@ ios::sync_with_stdio(false);
     
     int t; 
     // t = 1;
+    preprocess();
     cin>>t;
     while(t--)
     {
