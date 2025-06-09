@@ -58,48 +58,29 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-    ll n,k; cin >> n >> k;
-    vpl arr(n);
-    vl ind(n); cin >> ind;
-    rep(i,n){
-        ll a; cin >> a; 
-        arr[i] = make_pair(ind[i],a);
-    }
-    sort(all(arr));
-    vl ans(n);
-    multiset<ll>m;
-    ll sum = 0; 
-    rep(i,n){
-        if(!i){
-            ans[i] = 0;
-            m.insert(arr[i].s);
-            sum += arr[i].s;
+   int n; cin >> n;
+   vi dp(n+1, 1e9);
+   rep(i,10) dp[i] = 1;
+   dp[0] = 0;
+   for(int i = 10; i <= n; i++){
+        int j = i;
+        while(j > 0){
+            int rem = j % 10;
+            dp[i] = min(dp[i],1+dp[i-rem]);
+            j /= 10;
         }
-        else{
-            ans[i] = sum;
-            m.insert(arr[i].s);
-            sum += arr[i].s;
-            if(m.size() > k){
-                int a = *m.begin();
-                sum -= a;
-                m.erase(m.find(a));
-            }
-        }
-    }
-    for(auto i: ind){
-        cout << ans[--i] <<" ";
-    }
-    cout << endl;
+   }
+   print(dp[n]);
+
 }
 
 int main()
 {
 ios::sync_with_stdio(false);
     cin.tie(0);
-    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

@@ -57,74 +57,48 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-// ll f(vl& arr, ll n, ll m, ll i){
-//     if(i >= n){
-//         return 1;
-//     }
+bool valid(int x, int m){
+    return x>= 1 && x <= m;
+}
+
+void solve(){
+   int n,m; cin >> n >> m;
+   vi a(n);
+   cin >> a;
+   vector<vi>dp(n+1, vi(m+1,0));
+//    dp[i][k] = number of ways to build a prefix of size i
+//    such that the last element of the prefix is k
    
-//     ll ans = 0;
-//     if(arr[i] == 0){
-//         for(int j=1; j <= m; j++){
-//             arr[i] = j;
-//            ans += f(arr,n,m,i);
-//            ans = ans%M;
-//             arr[i] = 0;
-//         }
-//     }
-//     else if(i > 0 && abs(arr[i-1]-arr[i]) > 1) return 0;
-//     else if((i+1) < n && arr[i+1] == 0) {ans += f(arr,n,m,i+1); ans %= M;}
-//     else{
-//         if(i > 0 &&  i < (n-1) && (abs(arr[i-1]-arr[i]) <= 1)  && (abs(arr[i+1]-arr[i]) <= 1)) {ans += f(arr,n,m,i+1); ans %= M;}
-//         else if(i==0 && i < (n-1) && abs(arr[i+1]-arr[i]) <= 1 ) {ans += f(arr,n,m,i+1); ans%= M;}
-//         else if(i == (n-1) && abs(arr[i]-arr[i-1]) <= 1) {ans += f(arr,n,m,i+1); ans %= M;}
-//     }
-  
-//   return ans;
-// }
+// base case dp[i][k] = 1 if(a[0] = 0 or a[0] = k)
+    rep(i,m+1){
+        if(a[0] == i || a[0] == 0)
+           dp[1][i] = 1;
+    }
 
-// void solve(){
-//      ll n,m; cin >> n >> m;
-//      vl arr(n); cin >> arr;
-     
-//      if(n == 1){
-//         if(arr[0] == 0) print(m);
-//         else print(1);
-//         return;
-//      }
-    
-//      ll i = 0;
-//      ll ans = f(arr,n,m,i);
-//      print(ans);
+    for(int i = 2; i <= n; i++){
+        for(int k = 1; k <= m; k++){
+            // finding dp[i][k] here
+            if(a[i-1] != 0 && a[i-1] != k){
+                dp[i][k] = 0;
+                continue;
+            }
 
-// }
-
-int n, m;
-vector<int> arr;
-vector<vector<int>> dp;
-int f(int i, int prev) {
-    if (i == n) return 1;
-    if (prev != -1 && dp[i][prev] != -1) return dp[i][prev];
-    int ans = 0;
-    if (arr[i] != 0) {
-        if (prev == -1 || abs(arr[i] - prev) <= 1)
-            ans = f(i + 1, arr[i]);
-    } else {
-        for (int val = 1; val <= m; val++) {
-            if (prev == -1 || abs(val - prev) <= 1) {
-                ans = (ans + f(i + 1, val)) % M;
+            for(int prev = k-1; prev <= k+1; prev++){
+                if(!valid(prev,m)) continue;
+                // transition
+                dp[i][k] = (dp[i][k] + dp[i-1][prev]) % M;
             }
         }
     }
-    if (prev != -1) dp[i][prev] = ans;
-    return ans;
-}
 
-void solve() {
-    cin >> n >> m;
-    arr.resize(n);
-    for (int i = 0; i < n; ++i) cin >> arr[i];
-    dp.assign(n + 1, vector<int>(m + 2, -1));
-    cout << f(0, -1) << "\n";
+
+    int ans = 0;
+    for(int i = 1; i <=m ; i++){
+        ans = (ans + dp[n][i]) % M; 
+    }
+
+    cout << ans << endl;
+
 }
 
 int main()

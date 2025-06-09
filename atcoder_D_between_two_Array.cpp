@@ -3,7 +3,7 @@
 using namespace std;
 
 #define PI (3.141592653589)
-#define M 1000000007
+#define M 998244353
 #define pb push_back
 #define f first
 #define s second
@@ -57,40 +57,69 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    ll n,k; cin >> n >> k;
-    vpl arr(n);
-    vl ind(n); cin >> ind;
-    rep(i,n){
-        ll a; cin >> a; 
-        arr[i] = make_pair(ind[i],a);
+//Recursive dp
+
+// ll f(vl&a, vl&b, ll&n, vvl&dp, ll i, ll j){
+//     // base case
+//     if(i == n) return 1;
+//     if(dp[i][j] != -1) return dp[i][j];
+//     ll ans = 0;
+//     for(ll k = a[i]; k <= b[i]; k++){
+//         if(k >= j){
+//            ans += f(a,b,n,dp,i+1,k) ;
+//            ans %= M;
+//         }
+//     }
+//     return dp[i][j] = ans%M;
+// }
+
+// void solve(){
+//     ll n; cin >> n;
+//     vl a(n),b(n); cin >> a >> b;
+//     vector<vl>dp(n+1, vl(3001, -1));
+//     ll i = 0;
+//     ll j = 0;
+//     ll ans = f(a,b,n,dp,i,j);
+//     print(ans);
+// }
+
+void solve() {
+    ll n;
+    cin >> n;
+    vl a(n), b(n);
+    cin >> a >> b;
+
+    // dp[i][j] = number of ways to complete sequence starting from index i with previous value j
+    vector<vl> dp(n+1, vl(3001, 0)); // All values initially 0
+
+    // Base case: if i == n, there's 1 way (empty suffix)
+    for (ll j = 0; j <= 3000; ++j) {
+        dp[n][j] = 1;
     }
-    sort(all(arr));
-    vl ans(n);
-    multiset<ll>m;
-    ll sum = 0; 
-    rep(i,n){
-        if(!i){
-            ans[i] = 0;
-            m.insert(arr[i].s);
-            sum += arr[i].s;
+
+    // Bottom-up computation
+    for (ll i = n-1; i >= 0; --i) {
+        // Build suffix sum to optimize range queries
+        vl suff(3002, 0);  // suff[j] = dp[i+1][j] + dp[i+1][j+1] + ... + dp[i+1][3000]
+        for (ll j = 3000; j >= 0; --j) {
+            suff[j] = (dp[i+1][j] + suff[j+1]) % M;
         }
-        else{
-            ans[i] = sum;
-            m.insert(arr[i].s);
-            sum += arr[i].s;
-            if(m.size() > k){
-                int a = *m.begin();
-                sum -= a;
-                m.erase(m.find(a));
+
+        for (ll j = 0; j <= 3000; ++j) {
+            ll l = max(a[i], j); // next number must be in [a[i], b[i]] and >= j
+            ll r = b[i];
+            if (l <= r) {
+                dp[i][j] = (suff[l] - suff[r+1] + M) % M;
+            } else {
+                dp[i][j] = 0;
             }
         }
     }
-    for(auto i: ind){
-        cout << ans[--i] <<" ";
-    }
-    cout << endl;
+
+    cout << dp[0][0] << "\n";
 }
+
+
 
 int main()
 {
@@ -98,8 +127,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();
