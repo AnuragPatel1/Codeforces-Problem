@@ -58,11 +58,19 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-   
+   int a,b,c,d; cin >> a >>  b >> c >> d;
+   if((a >= b && c >= b) || (a >= d && c >= d)){
+        cout<<"Gellyfish"<<endl;
+    }
+    else
+    cout<<("Flower")<<endl;
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

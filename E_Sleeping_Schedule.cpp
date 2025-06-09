@@ -58,14 +58,43 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-   
+    int n,day, l, r; cin >> n >> day >> l >> r;
+    vi arr(n); cin >> arr;
+    
+    vector<vpi>dp(n+1, vpi(day+1,{0,0}));
+    
+    dp[0][0] = {0,1};
+    for(int i = 1; i <= n; i++){
+        for(int j = 0; j <= day; j++){
+            if(dp[i-1][j].s){
+                int k1 = (j + arr[i-1]) % day;
+                int k2 = (j + arr[i-1]-1+day) % day;
+                
+                   dp[i][k1].f = max(dp[i][k1].f, (dp[i-1][j].f) + (k1 >= l && k1 <= r) );
+
+                    dp[i][k2].f = max(dp[i][k2].f, (dp[i-1][j].f)+ (k2 >= l && k2 <= r) );
+
+
+                dp[i][k1].s = 1;
+                dp[i][k2].s = 1;
+                
+            }
+        }
+    }
+
+int ans = 0;
+for(auto i:dp[n]) ans = max(ans,i.f);
+print(ans);
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

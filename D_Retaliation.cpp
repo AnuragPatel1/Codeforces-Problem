@@ -57,12 +57,64 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-   
+void solve() {
+    ll n; 
+    cin >> n;
+    vector<ll> a(n); \
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+
+ 
+    ll C1, C2;
+
+  
+    C1 = a[1] - a[0];
+    C2 = a[0] - C1; 
+
+
+    bool is_arithmetic_progression = true;
+ 
+    for (int i = 2; i < n; ++i) {
+        if (a[i] != C1 * (i + 1) + C2) { 
+            is_arithmetic_progression = false;
+            break;
+        }
+    }
+
+    if (!is_arithmetic_progression) {
+        cout << "NO\n";
+        return;
+    }
+
+    if (C2 % (n + 1) != 0) {
+        cout << "NO\n";
+        return;
+    }
+
+    ll y = C2 / (n + 1);
+    if (y < 0) {
+        cout << "NO\n";
+        return;
+    }
+
+    ll x = C1 + y;
+
+    if (x < 0) {
+        cout << "NO\n";
+        return;
+    }
+
+
+    cout << "YES\n";
 }
+
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

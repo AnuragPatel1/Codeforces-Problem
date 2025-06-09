@@ -58,11 +58,29 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
+   int n; cin >> n;
    
+   vi arr(n+1);
+   arr[0] = 0;
+   rep(i,n) cin >> arr[i+1];
+//    debug(arr);
+   vector<bool> dp(n+1, false);
+   dp[0] = true;
+
+   rep(i,n+1){
+      if(i == 0) continue;
+      if((i+arr[i]) <= n && (i-1) >= 0 && dp[i-1]) dp[i+arr[i]] = true;
+      if((i-arr[i]-1) >= 0 && dp[i-arr[i]-1]) dp[i] = true;
+   }
+//    debug(dp);
+   dp[n] ? YES : NO;
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

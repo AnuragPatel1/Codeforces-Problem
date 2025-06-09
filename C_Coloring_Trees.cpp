@@ -57,15 +57,46 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+ll f(ll&n, ll&color,ll&k,vl&arr,vvl&cost, ll i, vector<vvl>&dp,ll group,ll last){
+    if(group > k) return 1e18;
+    if(i == n){
+        if(k == group) return 0;
+        else return 1e18;
+    }
+    if(dp[i][group][last] != -1) return dp[i][group][last];
+    ll ans = 1e18;
+    if(arr[i] == 0){
+        for(ll j = 0; j < color; j++){
+           ans = min(ans, cost[i][j] + f(n,color,k,arr,cost,i+1,dp,last==(j+1) ? group : group+1,j+1));
+        }
+    }
+    else ans = min(ans,f(n,color,k,arr,cost,i+1,dp,last==arr[i]?group:group+1,arr[i]));
+    return dp[i][group][last] = ans;
+}
+
 void solve(){
-   
+    ll n,color,k; cin >> n >> color >> k;
+    vl arr(n); cin >> arr;
+    vector<vl>cost(n,vl(color));
+    rep(i,n)rep(j,color)cin>>cost[i][j];
+    
+    ll i = 0;
+    ll group = 0;
+    ll last = 0;
+    vector<vector<vector<ll>>>dp(n+1,vector<vl>(k+1,vl(color+1,-1)));
+    ll ans = f(n,color,k,arr,cost,i,dp,group,last);
+    if(ans==1e18) ans = -1;
+    print(ans);
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

@@ -57,15 +57,112 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+
+// time complexity => 2 ^ 100
+// void f(vi&arr, int&n , set<int>&s, int i, int sum){
+//     if(i == n) return ;
+//     sum += arr[i];
+//     s.insert(sum);
+//     f(arr,n,s,i+1,sum);
+//     sum-=arr[i];
+//     f(arr,n,s,i+1,sum);
+// }
+
+// void solve(){
+//    int n; cin >> n;
+//    vi arr(n); cin >> arr;
+//    set<int>s;
+//    int i = 0;
+//    int sum = 0;
+//    f(arr,n,s,i,sum);
+//    print(s.size());
+//    for(auto i:s){
+//     cout << i << " ";
+//    }
+//    cout << endl;
+// }
+
+// void solve(){
+//     int n; cin >> n;
+//     vi arr(n); cin >> arr;
+//     set<int>s;
+//     for(int i = 0; i < n; i++){
+//         set<int>t = s;
+//         t.insert(arr[i]);
+//         for(auto j:s){
+//             t.insert(arr[i]+j);
+//         }
+//         s = t;
+//     }
+//     print(s.size());
+//     for(auto i:s){
+//         cout << i <<" ";
+//     }
+//     cout << endl;
+// }
+
+
+// void solve() {
+//     int n;
+//     cin >> n;
+//     vector<int> coins(n);
+//     for (int &x : coins) cin >> x;
+
+//     int max_sum = accumulate(coins.begin(), coins.end(), 0);
+//     vector<bool> dp(max_sum + 1, false);
+//     dp[0] = true;
+
+//     for (int coin : coins) {
+//         for (int i = max_sum; i >= 0; --i) {
+//             if (dp[i]) {
+//                 dp[i + coin] = true;
+//             }
+//         }
+//     }
+
+//     vector<int> res;
+//     for (int i = 1; i <= max_sum; ++i) {
+//         if (dp[i]) res.push_back(i);
+//     }
+
+//     cout << res.size() << "\n";
+//     for (int x : res) cout << x << " ";
+//     cout << "\n";
+// }
+
 void solve(){
-   
+    int n; cin >> n;
+    vi arr(n); cin >> arr;
+    int sum = accumulate(all(arr),0);
+    vector<bool>dp(sum+1, false);
+    dp[0] = true;
+
+    for(auto i:arr){
+        for(int j = sum; j >= 0; j--){
+            if(dp[j]){
+                dp[j+i] = true;
+            }
+        }
+    }
+
+    vi ans;
+    for(int i = 1; i <= sum; i++ ){
+        if(dp[i]) ans.pb(i);
+    }
+
+    cout << ans.size() << endl;
+    cout << ans;
+
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

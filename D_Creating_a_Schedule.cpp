@@ -58,11 +58,55 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-   
+    int q, n;
+    cin >> q >> n;
+    vector<int> arr(n);
+    for (int &x : arr) cin >> x;
+
+    sort(arr.begin(), arr.end());  // Sorted by floor implicitly
+
+    vector<vector<int>> ans(q, vector<int>(6));
+
+    int half = q / 2;
+
+    // Assign first half: low → high → ...
+    for (int i = 0; i < half; ++i){
+        for (int j = 0; j < 6; ++j){
+            if (j % 2 == 0) ans[i][j] = arr[i];            // low
+            else           ans[i][j] = arr[n - 1 - i];      // high
+        }
+    }
+
+    // Assign second half: high → low → ...
+    for (int i = 0; i < half; ++i){
+        for (int j = 0; j < 6; ++j){
+            if (j % 2 == 0) ans[i + half][j] = arr[n - 1 - i];  // high
+            else            ans[i + half][j] = arr[i];          // low
+        }
+    }
+
+    // Handle extra group if q is odd
+    if (q % 2 == 1){
+        int i = q - 1;
+        for (int j = 0; j < 6; ++j){
+            if (j % 2 == 0) ans[i][j] = arr[half];         // middle low
+            else            ans[i][j] = arr[n - 1 - half]; // middle high
+        }
+    }
+
+    // Print result
+    for (auto &grp : ans){
+        for (int x : grp) cout << x << " ";
+        cout << '\n';
+    }
 }
+
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

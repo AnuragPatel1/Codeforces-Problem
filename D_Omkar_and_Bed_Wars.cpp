@@ -57,12 +57,56 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+int helper(int index, string& str, vector<vector<vector<int>>>&dp, int sl, int l,int f, int s, int& n){
+     if(index == (n-1)){
+        int changes = 5e5;
+        if((sl != 0 || l != 0) && (f!=0 || s!=0) && (l!=0 || f != 0))
+            changes = min(changes, str[index] != 'L' ? 1 : 0);
+        if((sl!=1 || l != 1) && (f!=1 || s!=1) && (l!=1 || f != 1))
+           changes = min(changes, str[index] != 'R' ? 1 : 0);
+        return changes;
+     }
+
+     if(dp[index][sl][l] != -1) return dp[index][sl][l];
+
+     int changes = 5e5;
+
+     if(sl != 0 || l != 0){
+        changes = min(changes, (str[index] != 'L' ? 1 : 0) + helper(index+1, str,dp,l,0,f,s,n));
+     }
+
+     if(sl != 1 || l != 1){
+        changes = min(changes, (str[index] != 'R' ? 1 : 0) + helper(index+1, str,dp,l,1,f,s,n));
+     }
+
+     return dp[index][sl][l] = changes;
+
+}
+
+
+
 void solve(){
-   
+   int n; cin >> n;
+   string s; cin >> s; 
+   int ans = n;
+   rep(i,2){
+    rep(j,2){
+        vector<vector<vi>>dp(n,vector<vi>(2,vi(2,-1)));
+        // i is the first character
+        // j is the second character
+        int count1 = i == 0 ? s[0] != 'L' : s[0] != 'R';
+        int count2 = j == 0 ? s[1] != 'L' : s[1] != 'R';
+        ans = min(ans,helper(2,s,dp,i,j,i,j,n) + count1 + count2);
+    }
+   }
+   print(ans);
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

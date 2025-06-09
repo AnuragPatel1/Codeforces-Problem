@@ -57,12 +57,34 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+ll ff(ll&n, ll&m, vl&arr, vl&cold, vl&hot, ll last, ll i, vector<vl>&dp){
+    if(i == n) return 0;
+    if(dp[i][last] != -1) return dp[i][last];
+    
+    ll ans = 1e18;
+    ans = (arr[i-1] == arr[i] ? hot[arr[i]-1] : cold[arr[i]-1]) + ff(n,m,arr,cold,hot,last, i+1,dp);
+    ans = min(ans, (arr[i]==last ? hot[arr[i]-1] : cold[arr[i]-1]) + ff(n,m,arr,cold,hot,arr[i-1],i+1,dp) );
+    return dp[i][last] = ans;
+}
+
 void solve(){
-   
+    ll n,m; cin >> n >> m;
+    vl arr(n); cin >> arr;
+    vl cold(m); cin >> cold;
+    vl hot(m); cin >> hot;
+
+    ll last = arr[0];
+    ll ans = cold[arr[0]-1];
+    vector<vl>dp(n+1,vl(m+1,-1));
+    ans += ff(n,m,arr,cold,hot,last, 1,dp);
+    print(ans);
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

@@ -57,15 +57,42 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+const int N = 21;
+ll n;
+
+
+
+int f(int index,ll mask, vvi&grid, vvl&dp){
+    if(index == n) return 1;
+    if(dp[index][mask] != -1) return dp[index][mask];
+    
+    ll ways = 0;
+
+    for(ll i = 0; i < n; i++){
+        if(((1*1ll << i) & mask) == 0 && grid[index][i])
+             ways = (ways + f(index+1, mask + (1 << i),grid,dp)) % M;
+    }
+     
+    return dp[index][mask] = ways;
+}
+
+
 void solve(){
-   
+   vector<vi>grid(n,vi(n));
+   vector<vl>dp(n, vl(1 << N, -1));
+   rep(i,n){rep(j,n) cin >> grid[i][j];}
+   print(f(0,0,grid,dp));
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    cin >> n;
+    // cin>>t;
     while(t--)
     {
         solve();

@@ -57,15 +57,60 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+pi f(int&n ,int&m, vvi&arr, vector<vpi>&dp, int i, int xx){
+    // base cse
+    if(i == n){
+        if(xx == 0) return {0,-1};
+        else return {1,-1};
+    }
+
+    if(dp[i][xx].f != -1) return dp[i][xx];
+
+    dp[i][xx].f = 0;
+    for(int j = 0; j < m; j++){
+        if(f(n,m,arr,dp,i+1,xx^arr[i][j]).f){
+            dp[i][xx] = {1,j};
+            break;
+        }
+    }
+    return dp[i][xx];
+
+}
+
 void solve(){
-   
+   int n,m; cin >> n >> m;
+   vector<vi>arr(n,vi(m));
+   rep(i,n) 
+      rep(j,m) cin >> arr[i][j];
+
+   vector<vpi>dp(n+1,vpi(1024,{-1,-1}));
+   int i = 0;
+   int xx = 0;
+   pi p = f(n,m,arr,dp,i,xx);
+   if(p.f == 0){
+    print("NIE"); return;
+   }
+   print("TAK");
+   i = 0, xx = 0;
+   while(i < n){
+     int elem = dp[i][xx].s;
+     cout << elem+1 <<" ";
+     int newRow = i+1;
+     int newXor = xx ^ arr[i][elem];
+     i = newRow;
+     xx = newXor;
+   }
+      
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

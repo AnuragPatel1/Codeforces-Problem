@@ -57,14 +57,46 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+const int N = 1001;
+vi num(N,1e7);
+
+
 void solve(){
+   int n,weight; cin >> n >> weight;
+   vi arr(n);
+   rep(i,n){
+    int a; cin >> a;
+    arr[i] = num[a];
+   }
+   vi val(n); cin >> val;
    
+   vector<int>dp(weight+1, 0);
+   rep(i,n){
+       for(int j = weight; j >= 0; j--){
+          if((j+arr[i]) <= weight)
+             dp[j+arr[i]] = max(dp[j+arr[i]], val[i]+dp[j]);
+       }
+   }
+   cout << dp[weight] << endl;
+
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
+    num[1] = 0;
+    for(int i = 1; i < N; i++){
+        for(int j = 1; j <= i; j++){
+            int k = i + (i/j);
+          if(k < N)  num[k] = min(num[k], 1 + num[i]);
+        }
+    }
+
+
     cin>>t;
     while(t--)
     {

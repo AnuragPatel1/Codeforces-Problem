@@ -57,15 +57,73 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+// time complexity is => 2^n
+
+// int f(vi&arr, int &n,  int last, int i){
+//     if(i == n) return 0;
+//     int ans1 = 0, ans2 = 0;
+//     if(arr[i] > last) ans1 = 1 + f(arr,n,arr[i],i+1);
+//     ans2 = f(arr,n,last,i+1);
+//     return max(ans1,ans2);
+// }
+
+// void solve(){
+//     int n; cin >> n;
+//     vi arr(n); cin >> arr;
+//     int last = 0;
+//     int i = 0;
+//     int ans = f(arr,n,last,i);
+//     print(ans);
+// }
+
+
+// time complexity is => n*n
+
+// void solve(){
+//     int n; cin >> n;
+//     vi arr(n); cin >> arr;
+//     vi dp(n,1); // base case all have length 1
+//     int lis = 1 ; // stores the maximum length till now
+//     for(int i = 1; i < n; i++){
+//         for(int j = 0; j < i; j++){
+//             if(arr[j] < arr[i]){
+//                 dp[i] = max(dp[i], 1+dp[j]);
+//             }
+//         }
+//         lis = max(dp[i],lis);
+//     }
+//     print(lis);
+// }
+
+
+// we need to solve in O(nlogn)
 void solve(){
-   
+    int n; cin >> n;
+    vi arr(n); cin >> arr;
+
+    vi dp;
+    for(int x:arr){
+        auto it = lower_bound(dp.begin(), dp.end(), x);
+        if(it == dp.end()){
+            dp.push_back(x);
+        }
+        else{
+            *it = x;
+        }
+    }
+
+    print(dp.size());
+
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

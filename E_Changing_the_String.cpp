@@ -58,11 +58,52 @@ template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
 void solve(){
-   
+    int n,q; cin >> n >> q;
+    string s; cin >> s;
+    set<int>a,b,c;
+    for(int i = 0; i < n; i++){
+        if(s[i] == 'a') a.insert(i);
+        else if(s[i] == 'b') b.insert(i);
+        else c.insert(i);
+    }
+    // debug(a);
+    // debug(b);
+    // debug(c);
+    while(q--){
+        char c1,c2; cin >> c1 >> c2;
+        if(c1 <= c2) continue;
+        if(c1 == 'b' && b.size() > 0){
+            int ind = *b.begin(); b.erase(ind);
+            a.insert(ind);
+        }
+        else if(c1 == 'c' && c.size() > 0){
+            if(c2 == 'a'){
+                int ind = *c.begin(); c.erase(ind);
+                a.insert(ind);
+            }
+            else{
+                int ind = *c.begin(); c.erase(ind);
+                b.insert(ind);
+            }
+        }
+    }
+
+    string ans = "";
+    int i = 0;
+    while(i < n){
+        if(a.count(i)){ans+='a';}
+        else if(b.count(i)){ans+='b';}
+        else{ans+='c';}
+        i++;
+    }
+   print(ans);
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
     // t = 1;
     cin>>t;

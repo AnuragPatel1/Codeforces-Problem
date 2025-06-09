@@ -57,15 +57,42 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+ll f(ll&n, vl&arr, vvl&dp, ll i , ll j){
+    if(i == j) return 0;
+    if(dp[i][j] != -1) return dp[i][j];
+
+    return dp[i][j] = arr[j]-arr[i] + min(f(n,arr,dp,i+1,j), f(n,arr,dp,i,j-1));
+}
+
 void solve(){
-   
+  ll n; cin >> n;
+  vl arr(n); cin >> arr;
+  sort(all(arr));
+  vector<vl>dp(n,vector<ll>(n,-1));
+  
+   for(int i = n-1; i >= 0; i--){
+      for(int j = i; j < n; j++){
+          if(i == j){
+              dp[i][j] = 0;
+          }
+          else {
+            dp[i][j] = arr[j]-arr[i] + min(dp[i+1][j], dp[i][j-1]);
+          }
+      }
+   }  
+
+   print(dp[0][n-1]);
+
 }
 
 int main()
 {
+ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();
