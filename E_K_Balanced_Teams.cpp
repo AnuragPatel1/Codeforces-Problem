@@ -57,31 +57,31 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
-        }
-    }
+
+int f(int&n, int&k, vi&idx,int i, int c, vvi&dp){
+    if(c == k || i == n)return 0;
+    if(dp[i][c] != -1) return dp[i][c];
     
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
+    int ans = 0;
+    ans = idx[i]-i+1 + f(n,k,idx,idx[i]+1,c+1,dp);
+    return dp[i][c] = max(ans, f(n,k,idx,i+1,c,dp));
+    
+}
 
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
+void solve(){
+    int n,k; cin >> n >> k;
+    vi arr(n); cin >> arr;
+    sort(all(arr));
+    vi idx(n);
+    for(int i = 0; i < n; i++){
+        idx[i] = upper_bound(all(arr), arr[i]+5) - arr.begin();
+        idx[i]-=1; 
     }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
-
+    // debug(idx);
+   
+    vector<vi>dp(n+1,vi(k+1,-1));
+    int ans = f(n,k,idx,0,0,dp);
+    print(ans);
 }
 
 int main()
@@ -90,8 +90,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

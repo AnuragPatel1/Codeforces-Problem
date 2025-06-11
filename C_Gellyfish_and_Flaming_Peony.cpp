@@ -57,30 +57,61 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+// int f(vi&arr,int&n,int&gcd,vvi&dp, int i, int last){
+//     // debug(i);
+//     if(gcd == last) return 0;
+//     if(i == n){
+//         if(gcd == last) return 0;
+//         else return 1e9;
+//     }
+//     if(dp[i][last] != 1e9) return dp[i][last];
+
+//     int ans = 1e9;
+//     ans = 1 + f(arr,n,gcd,dp,i+1,__gcd(last,arr[i]));
+//     ans = min(ans, f(arr,n,gcd,dp,i+1,last));
+//     return dp[i][last] = ans;
+
+// }
+
 void solve(){
-    ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
+  int n;
+    cin >> n;
+    vi arr(n);
+    for (int &x : arr) cin >> x;
+
+    int gcd = 0;
+    for (int x : arr) gcd = __gcd(gcd, x);
+
+ 
+    int c = count(arr.begin(), arr.end(), gcd);
+    if (c > 0) {
+        print(n - c);
+        return ;
+    }
+
+    vvi dp(n + 1, vi(5001, 1e9));
+
+    // Base case
+    for (int g = 0; g <= 5000; ++g) {
+        if (g == gcd) dp[n][g] = 0;
+    }
+
+    for (int i = n - 1; i >= 0; --i) {
+        for (int last = 0; last <= 5000; ++last) {
+            int take = 1e9;
+            int new_gcd = __gcd(last, arr[i]);
+            if (dp[i + 1][new_gcd] != 1e9) {
+                take = 1 + dp[i + 1][new_gcd];
+            }
+
+            int skip = dp[i + 1][last];
+
+            dp[i][last] = min(take, skip);
         }
     }
-    
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
 
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
+    int ans = dp[0][0] + (n - 2);  
+    print(ans);
 
 }
 

@@ -57,31 +57,36 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-void solve(){
-    ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
+void solve() {
+    ll person, key, dest;
+    cin >> person >> key >> dest;
+
+    vl arr(person);
+    for (ll &x : arr) cin >> x;
+
+    vl pos(key);
+    for (ll &x : pos) cin >> x;
+
+    sort(all(arr));
+    sort(all(pos));
+
+    // dp[i][j] = min max time if we assign keys from j onwards to people from i onwards
+    vvl dp(person + 1, vl(key + 1, 1e18));
+
+    // Base case: If no person is left, cost is 0
+    for (ll j = 0; j <= key; j++) dp[person][j] = 0;
+
+    for (ll i = person - 1; i >= 0; i--) {
+        for (ll j = key - 1; j >= 0; j--) {
+            ll cost = abs(arr[i] - pos[j]) + abs(pos[j] - dest);
+            if (j + 1 <= key)
+                dp[i][j] = min(dp[i][j], max(cost, dp[i + 1][j + 1]));
+            dp[i][j] = min(dp[i][j], dp[i][j + 1]);
         }
     }
-    
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
 
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
-
+    ll ans = dp[0][0];
+    print(ans);
 }
 
 int main()
@@ -90,8 +95,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

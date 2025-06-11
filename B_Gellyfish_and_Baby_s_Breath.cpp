@@ -3,7 +3,7 @@
 using namespace std;
 
 #define PI (3.141592653589)
-#define M 1000000007
+#define M 998244353
 #define pb push_back
 #define f first
 #define s second
@@ -57,30 +57,56 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+ll cal(ll b){
+    ll a = 2;
+    ll ans = 1;
+    while(b){
+        if(b&1) ans = (ans * a)%M;
+        a = (a*a)%M;
+        b/=2;
+    }
+    return ans%M;
+}
+
 void solve(){
-    ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
-        }
-    }
-    
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
+   ll n; cin >> n;
+   vl a(n); cin >> a;
+   vl b(n); cin >> b;
 
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
+   vpl ans;
+   ll maxA = -1, maxAindex = -1;
+   ll maxB = -1, maxBindex = -1;
+   ll i = 0;
+   while(i < n){
+      if(maxA < a[i]){
+          maxA = a[i]; maxAindex = i;
+      }
+      if(maxB < b[i]){
+        maxB = b[i] ; maxBindex = i;
+      }
+      
+      if(maxA > maxB){
+          ans.pb(make_pair(b[i-maxAindex], a[maxAindex]));
+      }
+      else if(maxB > maxA){
+        ans.pb(make_pair(a[i-maxBindex], b[maxBindex]));
+      }
+      else{ 
+        if(b[i-maxAindex] > a[i-maxBindex] )
+        ans.pb({maxA,b[i-maxAindex]});
+        else ans.pb({maxB,a[i-maxBindex]});
+      }
+      i++;
+   }
 
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
+//    debug(ans);
+
+   for(auto i:ans){
+       int a = (cal(i.first) + cal(i.second))%M;
+       cout << a <<" ";
+   }
+   cout << endl;
+
 
 }
 

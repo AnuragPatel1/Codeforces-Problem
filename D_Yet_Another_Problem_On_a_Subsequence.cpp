@@ -3,7 +3,7 @@
 using namespace std;
 
 #define PI (3.141592653589)
-#define M 1000000007
+#define M 998244353
 #define pb push_back
 #define f first
 #define s second
@@ -57,31 +57,41 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+ll f(ll&n, vl&arr, ll rem, ll i, vvl&dp){
+    if(i == n) return 0;
+    if(dp[i][rem] != -1) return dp[i][rem];
+    ll ans = 0;
+
+    if(rem > 0){
+       if((rem-1) == 0){
+          ans += f(n,arr,0,i+1,dp)+1;
+          ans %= M;
+          ans += f(n,arr,1,i+1,dp);
+          ans %= M;
+       }
+       else {
+          ans += f(n,arr,rem-1,i+1,dp);
+          ans %= M;
+          ans += f(n,arr,rem, i+1,dp);
+          ans %= M;
+       }
+    }
+    else{
+       if(arr[i] > 0 && ((arr[i]+i+1) <= n)) {ans += f(n,arr,arr[i], i+1, dp); ans %= M;}
+        ans += f(n,arr,0,i+1,dp);
+        ans %= M;
+    }
+   return dp[i][rem] = ans % M;
+}
+
 void solve(){
     ll n; cin >> n;
     vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
-        }
-    }
-    
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
-
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
-
+    ll rem = 0;
+    ll i = 0;
+    vector<vl>dp(n+1, vl(n+1, -1));
+    ll ans = f(n,arr,rem,i,dp);
+    print(ans);
 }
 
 int main()
@@ -90,8 +100,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

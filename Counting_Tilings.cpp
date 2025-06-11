@@ -57,41 +57,48 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
+void generate(int index, int mask1, int mask2, int& n,vvi&transitions){
+    if(index > n) return;
+    if(index == n){
+        transitions[mask1].pb(mask2);
+        return;
+    }
+    // current block is 1
+    generate(index+1, mask1 + (1 << index), mask2,n,transitions);
+
+    // current block is 0
+    generate(index+1, mask1,mask2+(1 << index), n, transitions);
+    generate(index+2, mask1, mask2,n,transitions);
+}
+
+int f(int index, int mask, int&m, vvi&transitions, vvi&dp){
+    if(index == m) return (mask == 0 ? 1 : 0);
+    if(dp[index][mask] != -1) return dp[index][mask];
+    int answer = 0;
+    for(auto &newMask : transitions[mask] ) answer = (answer + f(index+1,newMask,m,transitions,dp) )% M;
+    return dp[index][mask] = answer;
+}
+
 void solve(){
-    ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
-        }
-    }
-    
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
-
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
-        }
-    }
-    YES;
+    int n,m; cin >> n >> m;
+    vector<vector<int>>transitions((1 << n));
+    generate(0,0,0,n,transitions);
+     
+    vector<vector<int>>dp(m,vector<int>(1 << n, -1));
+    int ans = f(0,0,m,transitions,dp);
+    print(ans);
 
 }
 
 int main()
 {
 ios::sync_with_stdio(false);
+
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();

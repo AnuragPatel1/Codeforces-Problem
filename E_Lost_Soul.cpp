@@ -57,78 +57,29 @@ istream& operator>>(istream &istream, vector<T> &v){for (auto &it : v)cin >> it;
 template<typename T> // cout << vector<T>
 ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) cout << it << " "; return ostream; }
 
-struct DPResult {
-    int match;
-    set<pi> opt;
-};
 
-int f(int n, const vi& a, const vi& b) {
-    if (n == 0) {
-        return 0;
+void solve(){
+    int n; cin >> n;
+    vi a(n); cin >> a;
+    vi b(n); cin >> b;
+    
+    vector<bool>chk(n+1,false);
+    int i = n-1;
+    if(a[i] == b[i]){
+        cout << i+1 << endl; return;
     }
-    if (n == 1) {
-        return a[0] == b[0];
+    i--;
+    while(i >= 0){
+         if((a[i]==b[i]) || (a[i]==a[i+1]) || (b[i] == b[i+1]) || chk[a[i]] || chk[b[i]]){
+            print(i+1); return;
+         }
+         chk[a[i+1]] = true, chk[b[i+1]] = true;
+         i--;
     }
+   print(0);
 
-    vector<DPResult> dp(n);
-    dp[n - 1] = {a[n - 1] == b[n - 1], {{a[n - 1], b[n - 1]}}};
-    for (int i = n - 2; i >= 0; --i) {
-        int pp = dp[i + 1].match;
-        const auto& po = dp[i + 1].opt;
-
-        int cm = -1;
-        set<pair<int, int>> co;
-
-        for (const auto& prev : po) {
-            vpi cand;
-            cand.pb({a[i], b[i]});
-            cand.pb({prev.s, b[i]});
-            cand.pb({a[i], prev.f});
-            cand.pb({prev.s, prev.f});
-
-            for (const auto& p : cand) {
-                int mach = pp + (p.f == p.s);
-                if (mach > cm) {
-                    cm = mach;
-                    co.clear();
-                    co.insert(p);
-                } else if (mach == cm) {
-                    co.insert(p);
-                }
-            }
-        }
-        dp[i] = {cm, co};
-    }
-    return dp[0].match;
 }
 
-void solve() {
-    int n;
-    cin >> n;
-    vi a(n), b(n);
-    cin >> a >> b;
-
-    int maxi = 0;
-    maxi = f(n, a, b);
-    for (int k = 0; k < n; ++k) {
-        if (n - 1 == 0) {
-            maxi = max(maxi, 0);
-            continue;
-        }
-        vector<int> arem, brem;
-        arem.reserve(n - 1);
-        brem.reserve(n - 1);
-        for (int i = 0; i < n; ++i) {
-            if (i != k) {
-                arem.pb(a[i]);
-                brem.pb(b[i]);
-            }
-        }
-        maxi = max(maxi, f(n - 1, arem, brem));
-    }
-
-    cout << maxi << endl;
-}
 
 int main()
 {

@@ -59,29 +59,27 @@ ostream& operator<<(ostream &ostream, const vector<T> &c) { for (auto &it : c) c
 
 void solve(){
     ll n; cin >> n;
-    vl arr(n); cin >> arr;
-    ll diff = arr[1]-arr[0];
-    for(ll i = 0; i < (n-1); i++){
-        if(arr[i+1] - arr[i] != diff){
-            NO; return;
-        }
+    vl cost(n),weight(n);
+    rep(i,n){
+        ll a,b; cin >> a >> b;
+        a++;
+        cost[i] = b;
+        weight[i] = a;
     }
     
-    ll b = (arr[0]-diff)/(n+1);
-    ll a = diff + b;
-
-    if(a < 0 || b < 0 || (arr[0]-diff) % (n+1) != 0){
-        NO; return;
-    }
-
-    rep(i,n){
-        ll total = (n-i)*b + (i+1)*a;
-        if(arr[i] != total){
-            NO; return;
+    vector<ll>dp(n+1,1e18);
+    dp[0] = 0;
+    for(ll i = 0; i < n; i++){
+        for(ll j = n; j >= 0; j--){
+            if(dp[j] != 1e18){
+                // cerr << j+weight[i] <<" ";
+                if((j+weight[i]) >= n) dp[n] = min(dp[n], cost[i] + dp[j]);
+                else dp[j+weight[i]] = min(dp[j+weight[i]], cost[i] + dp[j]) ;
+            }
         }
+        // debug(dp);
     }
-    YES;
-
+    print(dp[n]);
 }
 
 int main()
@@ -90,8 +88,8 @@ ios::sync_with_stdio(false);
     cin.tie(0);
     
     int t; 
-    // t = 1;
-    cin>>t;
+    t = 1;
+    // cin>>t;
     while(t--)
     {
         solve();
